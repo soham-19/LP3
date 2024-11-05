@@ -198,3 +198,49 @@ public class KnapsackSolver {
         System.out.println("Exiting program.");
     }
 }
+
+/*
+1. Overview of Branch and Bound (B&B)
+Purpose: B&B is designed to efficiently handle combinatorial optimization problems by discarding large portions of the solution space that are unlikely to lead to an optimal solution.
+Knapsack Context: In the 0/1 Knapsack Problem, we aim to maximize the value in the knapsack without exceeding its weight capacity. B&B selectively explores subsets of items, only diving into those with a high chance of yielding a maximum profit.
+2. Key Concepts in B&B for 0/1 Knapsack
+Node Representation: Each node in the B&B tree represents a choice (i.e., either including or excluding a specific item).
+Levels: Each level in the B&B tree corresponds to an item. At each node, you decide either to:
+Include the item (adding its weight and value to the current knapsack configuration).
+Exclude the item (skipping to the next item without adding anything).
+Bounds: For each node, B&B calculates an upper bound of the maximum possible profit achievable from that node. This bound helps in pruning the search space.
+3. Bound Calculation
+The bound serves as an estimate of the maximum profit achievable from a particular node onward. It is calculated by:
+
+Adding full items from the current node level onward until the weight limit is reached.
+Adding a fraction of the next item (if needed) to partially fill the remaining capacity.
+This approach gives a theoretical upper limit on the profit, allowing us to avoid nodes that can't potentially improve the current best solution.
+
+4. Steps in B&B for 0/1 Knapsack
+Sort Items by Value-to-Weight Ratio: This sorting helps prioritize items with higher potential for maximizing profit.
+Initialize Priority Queue:
+The priority queue is used to store nodes based on their bound in descending order, ensuring the node with the highest potential is processed first.
+Process Nodes:
+Include Current Item: Create a child node representing the inclusion of the current item, calculate its profit, weight, and bound.
+Exclude Current Item: Create another child node representing the exclusion of the current item.
+Bound Check: If a node’s bound is less than the current maximum profit, it is discarded (pruned), as it cannot lead to an optimal solution.
+Update Maximum Profit:
+As nodes are processed, update the maximum profit if a new higher profit is found at any feasible solution (i.e., a node that does not exceed capacity).
+Continue Until Queue is Empty: The algorithm stops when all promising nodes have been processed.
+5. Advantages of B&B in Knapsack
+Efficient Pruning: B&B prunes large parts of the search space using the bound, leading to potentially significant reductions in computation.
+Optimal Solution: Given enough memory and computation time, B&B is guaranteed to find the optimal solution by exploring only feasible configurations with the highest potential.
+6. Limitations of B&B in Knapsack
+Memory Usage: The B&B tree can grow large, especially for instances with many items, as each level in the tree represents an item decision.
+Bound Calculation Complexity: Calculating the bound for each node adds overhead, which may impact performance if not implemented efficiently.
+
+Branch and Bound (B&B) Analysis for 0/1 Knapsack
+Time Complexity:
+
+Worst-case: Exponential, O(2^n), as it may explore all subsets if pruning is ineffective.
+Average-case: Often much better due to pruning, especially with items sorted by value-to-weight ratio, reducing search space significantly.
+Space Complexity:
+
+Depends on the branching, generally O(2^n) in the worst case due to potential storage of all nodes.
+Priority queues used for storing nodes add to space usage but aid in efficient pruning.
+*/
